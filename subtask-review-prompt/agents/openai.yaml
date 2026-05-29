@@ -1,4 +1,0 @@
-interface:
-  display_name: "Subtask Review Prompt"
-  short_description: "Neutral QA/review prompt format"
-  default_prompt: "Use $subtask-review-prompt to draft a neutral QA-loop review prompt for this code change."

@@ -1,12 +1,18 @@
 ---
-name: subtask-review-prompt
-description: Create neutral independent-review, QA-loop, or subagent prompts for alpha-project code changes. Use when the user says QA循环, QA loop, QA cycle, 独立评审, 子任务评审, subagent review, reviewer prompt, QA agent, audit agent, or asks to draft prompts for reviewers to assess alpha changes without leading them toward known issues or expected findings.
+name: autonomous-qa-loop
+description: Create neutral autonomous QA-loop prompts for fresh, independent, history-free agents reviewing complex code changes. Use when the user says QA loop, autonomous QA loop, automated QA loop, independent review, fresh agent review, vibe coding QA, subagent review, reviewer prompt, audit agent, or asks to repeatedly find bugs without leading the reviewer toward suspected issues, prior conclusions, or existing debugging context.
 ---
 
-# Subtask Review Prompt
+# Autonomous QA Loop
 
-Use this skill whenever Codex needs to draft a prompt for an independent
-reviewer, QA-loop reviewer, or subagent to review alpha-side changes.
+Use this skill to draft a neutral prompt for a fresh independent QA agent. The
+purpose is to keep each review pass free of prior debugging context, suspected
+bugs, expected conclusions, and implementation bias.
+
+This is useful when ordinary self-checks plateau: the same agent can find some
+issues, but later passes often inherit the same assumptions. A fresh,
+history-free reviewer can surface different defects when given only the
+original goal, concrete artifacts, and authoritative context.
 
 ## Hard Format
 
@@ -20,8 +26,9 @@ Review Target
 Relevant Context Documents
 ```
 
-Do not add other top-level sections. Do not add sections such as `已知问题`,
-`重点方向`, `预期发现`, `建议关注`, `我的判断`, or similar leading guidance.
+Do not add other top-level sections. Do not add sections such as `Known Issues`,
+`Focus Areas`, `Expected Findings`, `Suggested Checks`, `My Diagnosis`, or
+similar leading guidance.
 
 ## Neutrality Rules
 

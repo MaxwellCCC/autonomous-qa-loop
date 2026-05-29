@@ -1,50 +1,43 @@
-# Subtask Review Prompt Skill
+# Autonomous QA Loop
 
 English | [中文](#中文)
 
-A small Codex skill for drafting neutral independent-review, QA-loop, or
-subagent-review prompts for code changes.
+A portable prompt pattern for running fresh, neutral QA agents in repeated
+loops. It helps complex vibe-coded projects keep surfacing new bugs instead of
+getting stuck in biased self-checks.
 
-The skill is intentionally narrow: it helps an agent prepare a review prompt
-that gives another reviewer enough context and artifacts to inspect, without
-leaking suspected bugs, intended fixes, expected conclusions, or leading focus
-areas.
+This repository is not limited to Codex. The core idea works with any coding
+agent that can review files, diffs, logs, test output, or generated artifacts.
+A Codex skill wrapper is included for convenience.
 
-## What It Enforces
+## Problem
 
-- Exactly four top-level sections in the generated review prompt.
-- The original user or business requirement is preserved separately from
-  implementation details.
-- Review targets are concrete artifacts such as files, diffs, commits, logs,
-  generated outputs, or commands.
-- Context documents are listed as references, not as conclusions.
-- Known suspicions, expected findings, and prior opinions are excluded.
+AI coding agents are useful at self-review, but their later debugging passes
+often become less effective. Once an agent has seen prior assumptions,
+suspected fixes, or earlier conclusions, it tends to keep checking the same
+areas and miss different classes of bugs.
 
-## Install
+For complex projects, the stronger pattern is to run repeated QA passes with
+fresh agents that have no conversation history. Each pass should receive only
+the original requirement, the concrete artifacts to inspect, and authoritative
+context. The prompt must avoid leading the reviewer toward known suspicions or
+expected findings.
 
-Copy the skill folder into your Codex skills directory:
+## What This Provides
 
-```powershell
-Copy-Item -Recurse .\subtask-review-prompt $env:USERPROFILE\.codex\skills\
-```
+- A neutral review prompt structure for independent QA agents.
+- A hard separation between original goal, review target, and context sources.
+- Rules that prevent leaking suspected bugs, intended fixes, prior opinions, or
+  expected conclusions.
+- A repeatable QA-loop pattern: run a fresh agent, fix confirmed issues, then
+  run another fresh neutral pass.
+- An optional Codex skill wrapper for users who want the prompt available as a
+  local skill.
 
-On macOS or Linux:
+## Core Prompt
 
-```bash
-cp -R ./subtask-review-prompt ~/.codex/skills/
-```
-
-Then start a new Codex session so the skill metadata is discovered.
-
-## Usage
-
-Ask Codex to use the skill when you need an independent reviewer prompt:
-
-```text
-Use $subtask-review-prompt to draft a QA loop review prompt for this change.
-```
-
-The generated prompt uses English section headings:
+Use [PROMPT.md](PROMPT.md) with any agent. The generated QA prompt must contain
+exactly four top-level sections:
 
 ```text
 Background
@@ -53,12 +46,35 @@ Review Target
 Relevant Context Documents
 ```
 
+## Optional Codex Skill Install
+
+Copy the included skill folder into your Codex skills directory:
+
+```powershell
+Copy-Item -Recurse .\autonomous-qa-loop $env:USERPROFILE\.codex\skills\
+```
+
+On macOS or Linux:
+
+```bash
+cp -R ./autonomous-qa-loop ~/.codex/skills/
+```
+
+Then start a new Codex session so the skill metadata is discovered.
+
+Use it like this:
+
+```text
+Use $autonomous-qa-loop to draft a neutral prompt for a fresh independent QA agent.
+```
+
 ## Repository Layout
 
 ```text
 .
+├── PROMPT.md
 ├── README.md
-└── subtask-review-prompt/
+└── autonomous-qa-loop/
     ├── SKILL.md
     └── agents/
         └── openai.yaml
@@ -66,36 +82,47 @@ Relevant Context Documents
 
 ## License
 
-CC0 1.0 Universal. You can copy, modify, redistribute, and use this skill for
-any purpose.
+CC0 1.0 Universal. You can copy, modify, redistribute, and use this prompt
+pattern for any purpose.
 
 ## 中文
 
-这是一个很小的 Codex skill，用来生成中立的独立评审、QA 循环或子任务评审 prompt。
+这是一个通用的“自动 QA 循环”提示词模式，用来让全新的、无历史上下文的独立
+agent 反复审查复杂代码变更。它不是 Codex 专用；任何能看文件、diff、日志、测
+试输出或生成物的 coding agent 都可以使用。
 
-它的核心价值是把“原始需求”“审核对象”“相关上下文”分开，并禁止把已知怀疑、
-预期结论或倾向性检查方向泄漏给评审者，从而降低评审 prompt 带偏的风险。
+### 它解决的问题
 
-### 安装
+vibe coding 做复杂项目时，经常会堆出很多隐藏 bug。让同一个 AI 自查虽然能发现
+一部分问题，但第二、第三轮 debug 往往会被前面的上下文、猜测和修复方向影响，
+很难继续发现新的问题。
 
-把 skill 文件夹复制到 Codex skills 目录：
+更有效的做法是每一轮都开启一个全新的、无历史上下文的 agent，只给它原始需求、
+具体审核对象和权威上下文，不告诉它已知怀疑、预期问题或前一轮结论。确认问题并
+修复后，再开启下一轮新的中立审核。这样循环几轮，复杂项目里的 bug 会更容易被
+系统性挖出来。
+
+### 内容
+
+- [PROMPT.md](PROMPT.md)：通用提示词规则，可给任何 agent 使用。
+- `autonomous-qa-loop/`：可选的 Codex skill 包装。
+
+### Codex Skill 安装方式（可选）
 
 ```powershell
-Copy-Item -Recurse .\subtask-review-prompt $env:USERPROFILE\.codex\skills\
+Copy-Item -Recurse .\autonomous-qa-loop $env:USERPROFILE\.codex\skills\
 ```
 
 macOS 或 Linux：
 
 ```bash
-cp -R ./subtask-review-prompt ~/.codex/skills/
+cp -R ./autonomous-qa-loop ~/.codex/skills/
 ```
 
-然后开启新的 Codex 会话，让 Codex 重新发现 skill metadata。
-
-### 使用
+使用：
 
 ```text
-Use $subtask-review-prompt to draft a QA loop review prompt for this change.
+Use $autonomous-qa-loop to draft a neutral prompt for a fresh independent QA agent.
 ```
 
 ### 许可证
