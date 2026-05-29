@@ -3,12 +3,9 @@
 English | [中文](#中文)
 
 A portable prompt pattern for running fresh, neutral QA agents in repeated
-loops. It helps complex vibe-coded projects keep surfacing new bugs instead of
-getting stuck in biased self-checks.
-
-This repository is not limited to Codex. The core idea works with any coding
-agent that can review files, diffs, logs, test output, or generated artifacts.
-A Codex skill wrapper is included for convenience.
+loops. It works with coding agents that can review files, diffs, logs, test
+output, or generated artifacts, and helps complex vibe-coded projects keep
+surfacing new bugs instead of getting stuck in biased self-checks.
 
 ## Problem
 
@@ -31,8 +28,7 @@ expected findings.
   expected conclusions.
 - A repeatable QA-loop pattern: run a fresh agent, fix confirmed issues, then
   run another fresh neutral pass.
-- An optional Codex skill wrapper for users who want the prompt available as a
-  local skill.
+- A plain prompt file plus an optional packaged version for local agent tooling.
 
 ## Core Prompt
 
@@ -88,8 +84,8 @@ pattern for any purpose.
 ## 中文
 
 这是一个通用的“自动 QA 循环”提示词模式，用来让全新的、无历史上下文的独立
-agent 反复审查复杂代码变更。它不是 Codex 专用；任何能看文件、diff、日志、测
-试输出或生成物的 coding agent 都可以使用。
+agent 反复审查复杂代码变更。任何能看文件、diff、日志、测试输出或生成物的
+coding agent 都可以使用。
 
 ### 它解决的问题
 
@@ -105,7 +101,7 @@ vibe coding 做复杂项目时，经常会堆出很多隐藏 bug。让同一个 
 ### 内容
 
 - [PROMPT.md](PROMPT.md)：通用提示词规则，可给任何 agent 使用。
-- `autonomous-qa-loop/`：可选的 Codex skill 包装。
+- `autonomous-qa-loop/`：可选的本地 agent 工具包装。
 
 ### Codex Skill 安装方式（可选）
 
