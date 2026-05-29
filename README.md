@@ -42,6 +42,10 @@ Review Target
 Relevant Context Documents
 ```
 
+Run it as a loop: send the prompt to a fresh agent, fix confirmed issues, then
+start another fresh agent with a newly generated neutral prompt. Repeat until
+independent passes stop finding meaningful defects.
+
 ## Optional Codex Skill Install
 
 Copy the included skill folder into your Codex skills directory:

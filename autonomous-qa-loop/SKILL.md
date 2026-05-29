@@ -14,6 +14,10 @@ issues, but later passes often inherit the same assumptions. A fresh,
 history-free reviewer can surface different defects when given only the
 original goal, concrete artifacts, and authoritative context.
 
+Use the prompt as part of a loop: send it to a fresh agent, review and fix only
+confirmed issues, then start another fresh agent with a newly generated neutral
+prompt. Repeat until independent passes stop finding meaningful defects.
+
 ## Hard Format
 
 The review prompt must contain exactly these four English top-level sections,
@@ -95,6 +99,16 @@ Review Target
 Relevant Context Documents
 <Authoritative docs and context files the reviewer may read.>
 ```
+
+## QA Loop
+
+After a reviewer completes one pass:
+
+1. Triage the findings and fix only confirmed issues.
+2. Do not reuse the reviewer's conversation as context for the next reviewer.
+3. Generate a new neutral prompt with the same four-section structure.
+4. Start another fresh, history-free agent for the next pass.
+5. Repeat until fresh reviewers stop finding meaningful defects.
 
 ## Final Check
 
