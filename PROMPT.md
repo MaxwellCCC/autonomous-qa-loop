@@ -8,6 +8,10 @@ debugging conclusions, or areas you expect the reviewer to focus on. The goal
 is to let each QA pass independently inspect the artifacts and surface issues
 without inherited assumptions.
 
+For large projects, split the QA pass into independent module-level review
+packets whenever possible. Run those packets in parallel with separate fresh
+agents, then let the main thread triage the combined findings.
+
 ## Required Output Format
 
 The generated QA prompt must contain exactly these four top-level sections, in
@@ -38,6 +42,13 @@ Do not add sections such as `Known Issues`, `Expected Findings`, `Focus Areas`,
   are obsolete, state that fact in `Background`.
 - If some scope must not be reopened, state it in `Background`.
 - Include enough artifacts for review, but do not include expected issues.
+- For broad reviews, prefer one neutral prompt per module, subsystem, or test
+  surface so fresh agents can inspect independent slices in parallel.
+- Ask reviewers to report concrete defects and plausible concerns. They should
+  include evidence, uncertainty, and reproduction or verification hints when
+  available; they should not suppress suspicious findings merely because they
+  are not fully proven. The main thread decides whether each item is truly a
+  bug.
 
 ## Template
 
@@ -50,7 +61,9 @@ Goal (Original Request)
 <The original user requirement, as neutrally and faithfully as possible.>
 
 Review Target
-<Concrete artifacts to review: files, diffs, commits, outputs, commands, logs.>
+<Concrete artifacts to review: files, diffs, commits, outputs, commands, logs.
+Ask the reviewer to report concrete defects and plausible concerns with
+evidence, uncertainty, and verification hints when available.>
 
 Relevant Context Documents
 <Authoritative docs and context files the reviewer may read.>
@@ -58,8 +71,11 @@ Relevant Context Documents
 
 ## QA Loop
 
-1. Generate a neutral prompt with this pattern.
-2. Run it in a fresh agent with no prior debugging conversation.
-3. Fix only confirmed issues.
-4. Start another fresh agent with a newly generated neutral prompt.
-5. Repeat until independent passes stop finding meaningful defects.
+1. Split the target into module-level review packets when the scope is large.
+2. Generate a neutral prompt for each packet with this pattern.
+3. Run each packet in a fresh agent with no prior debugging conversation.
+4. Triage all reported defects, plausible concerns, and risk signals in the
+   main thread.
+5. Fix only issues confirmed by the main thread.
+6. Start another fresh-agent pass with newly generated neutral prompt(s).
+7. Repeat until fresh passes stop surfacing meaningful defects or concerns.

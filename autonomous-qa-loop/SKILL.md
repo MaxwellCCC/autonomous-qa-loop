@@ -1,6 +1,6 @@
 ---
 name: autonomous-qa-loop
-description: Create neutral autonomous QA-loop prompts for fresh, independent, history-free agents reviewing complex code changes. Use when the user says QA loop, autonomous QA loop, automated QA loop, independent review, fresh agent review, vibe coding QA, subagent review, reviewer prompt, audit agent, or asks to repeatedly find bugs without leading the reviewer toward suspected issues, prior conclusions, or existing debugging context.
+description: Create neutral autonomous QA-loop prompts for fresh, independent, history-free agents reviewing complex code changes, with module-level parallel review packets and broad reporting of plausible concerns. Use when the user says QA loop, autonomous QA loop, automated QA loop, independent review, fresh agent review, parallel QA agents, vibe coding QA, subagent review, reviewer prompt, audit agent, or asks to repeatedly find bugs without leading the reviewer toward suspected issues, prior conclusions, or existing debugging context.
 ---
 
 # Autonomous QA Loop
@@ -14,9 +14,12 @@ issues, but later passes often inherit the same assumptions. A fresh,
 history-free reviewer can surface different defects when given only the
 original goal, concrete artifacts, and authoritative context.
 
-Use the prompt as part of a loop: send it to a fresh agent, review and fix only
-confirmed issues, then start another fresh agent with a newly generated neutral
-prompt. Repeat until independent passes stop finding meaningful defects.
+Use the prompt as part of a loop. For broad scopes, split the target into
+module-level review packets and send each packet to a separate fresh agent in
+parallel. Triage the combined findings in the main thread, fix only confirmed
+issues, then start another fresh-agent pass with newly generated neutral
+prompt(s). Repeat until independent passes stop surfacing meaningful defects or
+concerns.
 
 ## Hard Format
 
@@ -50,6 +53,14 @@ similar leading guidance.
 - If some scope must not be reopened, state it in `Background`. Examples: do not
   revisit model-training policy, do not redesign portfolio logic, do not review
   deprecated V1/V2/V3 paths.
+- For broad reviews, split the target into neutral module-level prompts when
+  possible. Each prompt must remain self-contained and use the same four-section
+  structure.
+- Ask reviewers to report concrete defects and plausible concerns. They should
+  include evidence, uncertainty, and reproduction or verification hints when
+  available. They should not suppress suspicious findings merely because they
+  are not fully proven. The main thread decides whether each item is truly a
+  bug.
 
 ## Section Content
 
@@ -74,6 +85,8 @@ starting:
   or test commands.
 - Prefer exact paths and raw evidence over summaries.
 - Include enough artifacts for review, but do not include expected issues.
+- For large scopes, keep each prompt focused on one module, subsystem, workflow,
+  or test surface so multiple fresh reviewers can work in parallel.
 
 `Relevant Context Documents` must list documents the reviewer may use:
 
@@ -94,7 +107,9 @@ Goal (Original Request)
 <The original user requirement, as neutrally and faithfully as possible.>
 
 Review Target
-<Concrete artifacts to review: files, diffs, commits, outputs, commands, logs.>
+<Concrete artifacts to review: files, diffs, commits, outputs, commands, logs.
+Ask the reviewer to report concrete defects and plausible concerns with
+evidence, uncertainty, and verification hints when available.>
 
 Relevant Context Documents
 <Authoritative docs and context files the reviewer may read.>
@@ -104,11 +119,14 @@ Relevant Context Documents
 
 After a reviewer completes one pass:
 
-1. Triage the findings and fix only confirmed issues.
-2. Do not reuse the reviewer's conversation as context for the next reviewer.
-3. Generate a new neutral prompt with the same four-section structure.
-4. Start another fresh, history-free agent for the next pass.
-5. Repeat until fresh reviewers stop finding meaningful defects.
+1. Triage all reported defects, plausible concerns, and risk signals in the
+   main thread.
+2. Fix only issues confirmed by the main thread.
+3. Do not reuse a reviewer's conversation as context for the next reviewer.
+4. Generate new neutral prompt(s) with the same four-section structure.
+5. Split broad scopes into module-level prompts and run fresh reviewers in
+   parallel when possible.
+6. Repeat until fresh reviewers stop surfacing meaningful defects or concerns.
 
 ## Final Check
 

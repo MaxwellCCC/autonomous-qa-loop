@@ -1,4 +1,4 @@
 interface:
   display_name: "Autonomous QA Loop"
-  short_description: "Neutral prompts for fresh QA agents"
-  default_prompt: "Use $autonomous-qa-loop to draft a neutral prompt for a fresh independent QA agent."
+  short_description: "Parallel fresh-agent QA prompts"
+  default_prompt: "Use $autonomous-qa-loop to draft neutral module-level prompts for fresh independent QA agents."

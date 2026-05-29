@@ -26,8 +26,8 @@ expected findings.
 - A hard separation between original goal, review target, and context sources.
 - Rules that prevent leaking suspected bugs, intended fixes, prior opinions, or
   expected conclusions.
-- A repeatable QA-loop pattern: run a fresh agent, fix confirmed issues, then
-  run another fresh neutral pass.
+- A repeatable QA-loop pattern: split broad scopes by module, run fresh agents,
+  triage the combined findings, then run another fresh neutral pass.
 - A plain prompt file plus an optional packaged version for local agent tooling.
 
 ## Core Prompt
@@ -42,9 +42,10 @@ Review Target
 Relevant Context Documents
 ```
 
-Run it as a loop: send the prompt to a fresh agent, fix confirmed issues, then
-start another fresh agent with a newly generated neutral prompt. Repeat until
-independent passes stop finding meaningful defects.
+Run it as a loop: split broad scopes into module-level packets, send each
+packet to a fresh agent, triage both defects and plausible concerns in the main
+thread, fix confirmed issues, then start another fresh pass. Repeat until
+independent passes stop surfacing meaningful defects or concerns.
 
 ## Optional Codex Skill Install
 
@@ -97,10 +98,10 @@ vibe coding 做复杂项目时，经常会堆出很多隐藏 bug。让同一个 
 一部分问题，但第二、第三轮 debug 往往会被前面的上下文、猜测和修复方向影响，
 很难继续发现新的问题。
 
-更有效的做法是每一轮都开启一个全新的、无历史上下文的 agent，只给它原始需求、
-具体审核对象和权威上下文，不告诉它已知怀疑、预期问题或前一轮结论。确认问题并
-修复后，再开启下一轮新的中立审核。这样循环几轮，复杂项目里的 bug 会更容易被
-系统性挖出来。
+更有效的做法是每一轮都开启全新的、无历史上下文的 agent。大范围审查时先按模块
+拆成多个中立审核包并行跑，只给每个 agent 原始需求、具体审核对象和权威上下文，
+不告诉它已知怀疑、预期问题或前一轮结论。agent 需要报告明确缺陷和可疑风险点，
+主线程统一判断哪些是真 bug。确认问题并修复后，再开启下一轮新的中立审核。
 
 ### 内容
 
