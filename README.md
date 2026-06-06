@@ -28,6 +28,8 @@ expected findings.
   expected conclusions.
 - A repeatable QA-loop pattern: split broad scopes by module, run fresh agents,
   triage the combined findings, then run another fresh neutral pass.
+- Lightweight validation guidance that keeps QA focused on necessary core
+  behavior instead of heavyweight audit gates or process-only safeguards.
 - A plain prompt file plus an optional packaged version for local agent tooling.
 
 ## Core Prompt
@@ -45,7 +47,10 @@ Relevant Context Documents
 Run it as a loop: split broad scopes into module-level packets, send each
 packet to a fresh agent, triage both defects and plausible concerns in the main
 thread, fix confirmed issues, then start another fresh pass. Repeat until
-independent passes stop surfacing meaningful defects or concerns.
+independent passes stop surfacing meaningful defects or concerns. Keep
+validation lightweight: cover necessary core behavior, and avoid audit gates or
+process-heavy safeguards unless the original goal or production safety requires
+them.
 
 ## Optional Codex Skill Install
 
@@ -101,7 +106,9 @@ vibe coding 做复杂项目时，经常会堆出很多隐藏 bug。让同一个 
 更有效的做法是每一轮都开启全新的、无历史上下文的 agent。大范围审查时先按模块
 拆成多个中立审核包并行跑，只给每个 agent 原始需求、具体审核对象和权威上下文，
 不告诉它已知怀疑、预期问题或前一轮结论。agent 需要报告明确缺陷和可疑风险点，
-主线程统一判断哪些是真 bug。确认问题并修复后，再开启下一轮新的中立审核。
+主线程统一判断哪些是真 bug。校验必须保持轻量，只覆盖必要的核心生产需求，避免
+无生产价值的审计 gate、治理流程或重型校验管线。确认问题并修复后，再开启下一轮
+新的中立审核。
 
 ### 内容
 

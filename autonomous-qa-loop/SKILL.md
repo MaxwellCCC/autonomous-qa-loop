@@ -1,6 +1,6 @@
 ---
 name: autonomous-qa-loop
-description: Create neutral autonomous QA-loop prompts for fresh, independent, history-free agents reviewing complex code changes, with module-level parallel review packets and broad reporting of plausible concerns. Use when the user says QA loop, autonomous QA loop, automated QA loop, independent review, fresh agent review, parallel QA agents, vibe coding QA, subagent review, reviewer prompt, audit agent, or asks to repeatedly find bugs without leading the reviewer toward suspected issues, prior conclusions, or existing debugging context.
+description: Create neutral autonomous QA-loop prompts for fresh, independent, history-free agents reviewing complex code changes, with module-level parallel review packets, broad reporting of plausible concerns, and lightweight production-focused validation. Use when the user says QA loop, autonomous QA loop, automated QA loop, independent review, fresh agent review, parallel QA agents, vibe coding QA, subagent review, reviewer prompt, audit agent, or asks to repeatedly find bugs without leading the reviewer toward suspected issues, prior conclusions, existing debugging context, or heavyweight audit/gate processes.
 ---
 
 # Autonomous QA Loop
@@ -20,6 +20,12 @@ parallel. Triage the combined findings in the main thread, fix only confirmed
 issues, then start another fresh-agent pass with newly generated neutral
 prompt(s). Repeat until independent passes stop surfacing meaningful defects or
 concerns.
+
+Keep validation lean. The generated prompt should discourage reviewers from
+adding audit gates, governance gates, broad compliance checks, heavyweight
+validation pipelines, or process-only safeguards unless the original goal or
+production safety explicitly requires them. Validation should cover only the
+necessary core behavior and avoid wasting runtime, cost, or performance.
 
 ## Hard Format
 
@@ -61,6 +67,10 @@ similar leading guidance.
   available. They should not suppress suspicious findings merely because they
   are not fully proven. The main thread decides whether each item is truly a
   bug.
+- Keep validation lightweight and production-relevant. Do not ask reviewers to
+  propose audit gates, governance gates, broad compliance checks, heavyweight
+  validation pipelines, or process-only safeguards unless the original goal or
+  production safety explicitly requires them.
 
 ## Section Content
 
@@ -87,6 +97,9 @@ starting:
 - Include enough artifacts for review, but do not include expected issues.
 - For large scopes, keep each prompt focused on one module, subsystem, workflow,
   or test surface so multiple fresh reviewers can work in parallel.
+- Ask the reviewer to cover only necessary core behavior. Avoid validation work
+  that adds runtime, cost, performance impact, or process overhead without clear
+  production value.
 
 `Relevant Context Documents` must list documents the reviewer may use:
 
@@ -109,7 +122,10 @@ Goal (Original Request)
 Review Target
 <Concrete artifacts to review: files, diffs, commits, outputs, commands, logs.
 Ask the reviewer to report concrete defects and plausible concerns with
-evidence, uncertainty, and verification hints when available.>
+evidence, uncertainty, and verification hints when available. Ask the reviewer
+to keep validation lightweight and production-relevant, and to avoid proposing
+new audit/governance gates unless they are necessary for the original goal or
+production safety.>
 
 Relevant Context Documents
 <Authoritative docs and context files the reviewer may read.>
@@ -121,7 +137,8 @@ After a reviewer completes one pass:
 
 1. Triage all reported defects, plausible concerns, and risk signals in the
    main thread.
-2. Fix only issues confirmed by the main thread.
+2. Fix only issues confirmed by the main thread, and reject validation work that
+   adds process cost without core production value.
 3. Do not reuse a reviewer's conversation as context for the next reviewer.
 4. Generate new neutral prompt(s) with the same four-section structure.
 5. Split broad scopes into module-level prompts and run fresh reviewers in

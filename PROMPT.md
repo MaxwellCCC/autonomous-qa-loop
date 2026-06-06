@@ -49,6 +49,11 @@ Do not add sections such as `Known Issues`, `Expected Findings`, `Focus Areas`,
   available; they should not suppress suspicious findings merely because they
   are not fully proven. The main thread decides whether each item is truly a
   bug.
+- Keep validation lightweight and production-relevant. Do not ask reviewers to
+  propose audit gates, governance gates, broad compliance checks, heavyweight
+  validation pipelines, or process-only safeguards unless the original goal or
+  production safety explicitly requires them. Validation should cover only the
+  necessary core behavior and avoid wasting runtime, cost, or performance.
 
 ## Template
 
@@ -63,7 +68,10 @@ Goal (Original Request)
 Review Target
 <Concrete artifacts to review: files, diffs, commits, outputs, commands, logs.
 Ask the reviewer to report concrete defects and plausible concerns with
-evidence, uncertainty, and verification hints when available.>
+evidence, uncertainty, and verification hints when available. Ask the reviewer
+to keep validation lightweight and production-relevant, and to avoid proposing
+new audit/governance gates unless they are necessary for the original goal or
+production safety.>
 
 Relevant Context Documents
 <Authoritative docs and context files the reviewer may read.>
@@ -76,6 +84,7 @@ Relevant Context Documents
 3. Run each packet in a fresh agent with no prior debugging conversation.
 4. Triage all reported defects, plausible concerns, and risk signals in the
    main thread.
-5. Fix only issues confirmed by the main thread.
+5. Fix only issues confirmed by the main thread; reject validation work that
+   adds process cost without core production value.
 6. Start another fresh-agent pass with newly generated neutral prompt(s).
 7. Repeat until fresh passes stop surfacing meaningful defects or concerns.
